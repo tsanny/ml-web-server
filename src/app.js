@@ -33,11 +33,12 @@ const { loadModel, predict } = require("./ml");
         // do and get prediction result by giving model and image
         const predictions = await predict(model, image);
         // get prediction result
-        const cancer = predictions;
+        const [cancer] = predictions;
         const id = uuid();
         const createdAt = new Date().toISOString();
         let result, suggestion;
 
+        console.log(cancer);
         if (cancer === 1) {
           result = "Cancer";
           suggestion = "You boutta DIE!!";
