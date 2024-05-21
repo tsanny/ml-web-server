@@ -1,8 +1,9 @@
 const tfjs = require("@tensorflow/tfjs-node");
 
 function loadModel() {
-  const modelUrl = "file://models/model-tfjs/model.json";
-  return tfjs.loadGraphModel(modelUrl);
+  return tfjs.loadGraphModel(
+    "https://storage.googleapis.com/submissionmlgc-sulthan.appspot.com/model/model.json",
+  );
 }
 
 function predict(model, imageBuffer) {
