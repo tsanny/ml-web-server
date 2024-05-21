@@ -37,7 +37,7 @@ const { loadModel, predict } = require("./ml");
           result = "Cancer";
           suggestion = "You boutta DIE!!";
         } else {
-          result = "Not cancer";
+          result = "Non-cancer";
           suggestion = "You good";
         }
 
@@ -53,11 +53,13 @@ const { loadModel, predict } = require("./ml");
         predDoc.set(data);
         console.log("prediction result saved to firestore database.");
 
-        return {
-          status: "success",
-          message: "Model is predicted successfully",
-          data: data,
-        };
+        return h
+          .response({
+            status: "success",
+            message: "Model is predicted successfully",
+            data: data,
+          })
+          .code(201);
       } catch (error) {
         console.error(error);
         return h
