@@ -1,8 +1,12 @@
 const Hapi = require("@hapi/hapi");
+const { Firestore } = require("@google-cloud/firestore");
 const { v4: uuid } = require("uuid");
 const { loadModel, predict } = require("./ml");
-
 (async () => {
+  const db = new Firestore();
+  console.log("firestore database loaded!");
+  const predictionsCollections = db.collection("predictions");
+
   // load and get machine learning model
   const model = await loadModel();
   console.log("model loaded!");
@@ -37,15 +41,22 @@ const { loadModel, predict } = require("./ml");
           suggestion = "You good";
         }
 
+        const data = {
+          id: id,
+          result: result,
+          suggestion: suggestion,
+          createdAt: createdAt,
+        };
+
+        // storing to db
+        const predDoc = predictionsCollections.doc(id);
+        predDoc.set(data);
+        console.log("prediction result saved to firestore database.");
+
         return {
           status: "success",
           message: "Model is predicted successfully",
-          data: {
-            id: id,
-            result: result,
-            suggestion: suggestion,
-            createdAt: createdAt,
-          },
+          data: data,
         };
       } catch (error) {
         console.error(error);
